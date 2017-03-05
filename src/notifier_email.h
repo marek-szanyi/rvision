@@ -37,9 +37,17 @@ namespace rvision {
     template<typename Temailer, typename Tconfig, typename Tvalue>
     class notifier_email : public observer<Tvalue> {
     public:
+
+        Tconfig &configure() {
+            return m_config;
+        }
+
         void update(const Tvalue &value) override {
 
         }
+
+    private:
+        Tconfig m_config;
     };
 
 }

@@ -97,8 +97,8 @@ namespace rvision {
 
         }
 
-        void configure(const boost::filesystem::path &config) {
-            m_config.read(config);
+        Tconfig &configure() {
+            return m_config;
         }
 
         void update(const Tvalue &value) override {
