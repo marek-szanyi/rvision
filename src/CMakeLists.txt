@@ -17,6 +17,7 @@ set(SOURCE_FILES
         ./rest_client.cpp
         ./network_error.h
         ./config_error.h
+        ./rest_api_factory.h
 )
 
 set(LIBB64_FILES
