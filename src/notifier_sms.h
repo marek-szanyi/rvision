@@ -34,7 +34,7 @@
 #include <boost/program_options.hpp>
 
 #include "observer.h"
-#include "notificator.h"
+#include "notifiers.h"
 
 
 namespace rvision {

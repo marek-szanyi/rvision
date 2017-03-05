@@ -26,7 +26,7 @@
 #define RVISION_NOTIFIER_EMAIL_H
 
 #include "observer.h"
-#include "notificator.h"
+#include "notifiers.h"
 
 namespace rvision {
 

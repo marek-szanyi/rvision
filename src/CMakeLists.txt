@@ -4,8 +4,8 @@ set(SOURCE_FILES
         ./motion_engine.h
         ./rest_client.h
         ./rest_api_123sms.h
-        ./notificator.h
-        ./notificator_builder.h
+        ./notifiers.h
+        ./notifiers_builder.h
         ./notifier_sms.h
         ./notifier_email.h
         ./observer.h
@@ -16,7 +16,8 @@ set(SOURCE_FILES
         ./notifier_disk.h
         ./rest_client.cpp
         ./network_error.h
-        ./config_error.h)
+        ./config_error.h
+)
 
 set(LIBB64_FILES
         ../libs/libb64/cdecode.c

@@ -27,7 +27,7 @@
 #define RVISION_NOTIFIER_DISK_H
 
 #include "observer.h"
-#include "notificator.h"
+#include "notifiers.h"
 
 namespace rvision {
 

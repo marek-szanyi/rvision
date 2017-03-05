@@ -32,8 +32,8 @@
 #include "rest_api_mailgate.h"
 #include "notifier_sms.h"
 #include "notifier_email.h"
-#include "notificator.h"
-#include "notificator_builder.h"
+#include "notifiers.h"
+#include "notifiers_builder.h"
 #include "event.h"
 
 namespace rvision {

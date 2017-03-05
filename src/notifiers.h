@@ -31,7 +31,7 @@
 namespace rvision {
 
     template<typename Tvalue>
-    class notificator {
+    class notifiers {
     public:
 
         void attach(observer <Tvalue> *observer) {
