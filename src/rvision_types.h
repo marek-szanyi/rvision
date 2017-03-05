@@ -38,19 +38,16 @@
 
 namespace rvision {
 
-//    using notifier_sms_123 = rvision::notifier_sms<rvision::rest_api_123sms, rvision::notifier_sms_file_conf, rvision::event>;
-//
-//    using notifier_email_pop = rvision::notifier_email<rvision::rest_api_mailgate, rvision::notifier_email_file_conf, rvision::event>;
-//
-//    using notificator_builder_fileconf = rvision::notificator_builder::builder<rvision::event,boost::filesystem::path>;
-//
-//    template<typename T>
-//    using register_fileconf_notifier = rvision::notificator_builder::register_notifier<T, rvision::event,boost::filesystem::path>;
-//
-//    register_fileconf_notifier<rvision::notifier_sms_123> _notifier_sms_123_registered([](boost::filesystem::path conf) -> rvision::observer<rvision::event>*
-//                                                                                       {
-//
-//    });
+    /**
+     * @brief send SMS messages by using a REST service(123sms), configured from a file
+     */
+    using sender_sms_rest = rest_api_123sms<rest_client,config_file_123sms>;
+
+    /**
+     * @brief send e-mails by using a REST service(mailgate), configured from a file
+     */
+    using sender_mail_rest = rest_api_mailgate<rest_client,config_file_mailgate>;
+
 }
 
 #endif //RVISION_RVISION_TYPES_H
