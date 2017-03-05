@@ -108,7 +108,7 @@ TEST_F(rest_api_123sms_test, sending_with_config_no_address) {
     std::string empty;
 
     try {
-        rest_api_123sms.configure("/conf.conf");
+        rest_api_123sms.configure().read("/conf.conf");
         rest_api_123sms.send_sms(empty, "hello world");
         FAIL();
     } catch (std::invalid_argument &ia) { }
@@ -118,6 +118,6 @@ TEST_F(rest_api_123sms_test, sending_with_conf_and_address) {
     std::shared_ptr<mock_rest_client> rest_client = std::make_shared<mock_rest_client>();
     rvision::rest_api_123sms<mock_rest_client,mock_config> rest_api_123sms(rest_client);
 
-    rest_api_123sms.configure("/conf.conf");
+    rest_api_123sms.configure().read("/conf.conf");
     rest_api_123sms.send_sms("+421905554123", "hello world");
 }

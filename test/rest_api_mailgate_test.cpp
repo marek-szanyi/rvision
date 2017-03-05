@@ -97,7 +97,7 @@ TEST_F(rest_api_mailgate_test, send_config_missing_to_address) {
     std::string empty;
 
     try {
-        rest_api_mailgate.configure("./confi.conf");
+        rest_api_mailgate.configure().read("./confi.conf");
         rest_api_mailgate.send_mail(empty, "lala", "nanan");
         FAIL();
     } catch (std::invalid_argument &ia) { }

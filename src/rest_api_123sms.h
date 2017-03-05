@@ -107,8 +107,8 @@ namespace rvision {
                 : m_config(), m_rest_client(rest_client) {
         }
 
-        void configure(const boost::filesystem::path &config) {
-            m_config.read(config);
+        TConfig &configure() {
+            return m_config;
         }
 
 
