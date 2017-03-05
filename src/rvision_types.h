@@ -48,6 +48,23 @@ namespace rvision {
      */
     using sender_mail_rest = rest_api_mailgate<rest_client,config_file_mailgate>;
 
+    /**
+     * @brief a builder for creating notifiers which are configured from config files
+     */
+    using notifiers_builder_fileconf = rvision::notifiers_builder::builder<rvision::event,boost::filesystem::path>;
+
+    /**
+     * @brief register of notifiers which are configured from config files
+     */
+    template<typename T, typename K>
+    using notifiers_register_fileconf = rvision::notifiers_builder::register_notifier<T, K, boost::filesystem::path>;
+
+    /**
+     * @brief register of notifiers which are notifying rvision::event and are configured from files
+     */
+    template<typename T>
+    using notifiers_event_register = notifiers_register_fileconf<T, event>;
+
 }
 
 #endif //RVISION_RVISION_TYPES_H
