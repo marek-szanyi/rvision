@@ -1,4 +1,9 @@
+#include "easylogging++.h"
+#include "application.h"
 
-int main() {
-    return 0;
+INITIALIZE_EASYLOGGINGPP
+
+int main(int argc, const char **argv) {
+    rvision::sys::application app;
+    return app.run(argc, argv);
 }
