@@ -35,6 +35,7 @@
 
 #include "observer.h"
 #include "notifiers.h"
+#include "config_error.h"
 
 
 namespace rvision {
@@ -48,15 +49,21 @@ namespace rvision {
                   m_config_map(po::variables_map()) {
 
             m_config_desc.add_options()
-                    ("min_interval", po::value<size_t>(), "minimal interval between notifications")
-                    ("telnums", po::value<std::string>(), "phone numbers to notify")
+                    ("min_interval", po::value<size_t>()->required(), "minimal interval between notifications")
+                    ("telnums", po::value<std::string>()->required(), "phone numbers to notify")
                     ("msg", po::value<std::string>(), "optional message of the notification");
+
         }
 
         void read(const boost::filesystem::path &config) {
-            po::store(po::parse_config_file<char>(config.generic_string().c_str(), m_config_desc), m_config_map);
-            po::notify(m_config_map);
+            try {
+                po::store(po::parse_config_file<char>(config.generic_string().c_str(), m_config_desc), m_config_map);
+                po::notify(m_config_map);
+            } catch (po::error &e) {
+                throw rvision::config_error(e.what());
+            }
         }
+
 
         size_t min_interval() {
             return m_config_map["min_interval"].as<size_t>();
