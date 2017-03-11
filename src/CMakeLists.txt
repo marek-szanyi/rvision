@@ -1,4 +1,12 @@
 
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file(
+        "./rvision_config.h.in"
+        "${PROJECT_BINARY_DIR}/rvision_config.h"
+)
+
+
 set(SOURCE_FILES
         ./motion_engine.cpp
         ./motion_engine.h
@@ -29,7 +37,7 @@ set(LIBB64_FILES
         ../libs/libb64/encode.h
         )
 
-include_directories(${EASYLOGGINGPP_INCLUDE_DIRS})
+include_directories(${EASYLOGGINGPP_INCLUDE_DIRS} ${PROJECT_BINARY_DIR})
 add_executable(raspvision ./main.cpp ${SOURCE_FILES} ${LIBB64_FILES})
 add_dependencies(raspvision easylogging)
 add_library(raspvisionlib ${SOURCE_FILES} ${LIBB64_FILES})
