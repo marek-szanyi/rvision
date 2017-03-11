@@ -11,6 +11,7 @@ find_package(Boost REQUIRED COMPONENTS program_options filesystem)
 
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
 add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
+add_subdirectory(${EXT_PROJECTS_DIR}/easyloggingpp)
 
 enable_testing()
 

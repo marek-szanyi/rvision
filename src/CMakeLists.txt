@@ -29,6 +29,8 @@ set(LIBB64_FILES
         ../libs/libb64/encode.h
         )
 
+include_directories(${EASYLOGGINGPP_INCLUDE_DIRS})
 add_executable(raspvision ./main.cpp ${SOURCE_FILES} ${LIBB64_FILES})
+add_dependencies(raspvision easylogging)
 add_library(raspvisionlib ${SOURCE_FILES} ${LIBB64_FILES})
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_THREAD_LIBS_INIT} restbed ssl crypto)
