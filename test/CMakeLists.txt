@@ -10,6 +10,7 @@ set(TEST_SOURCE_FILES
         ./rest_api_mailgate_test.cpp
         ./notifier_sms_test.cpp
         ./notifier_sms_file_conf_test.cpp
+        ./notifier_email_test.cpp
         )
 
 get_filename_component(DATA_TEST_DIR "./data" ABSOLUTE)

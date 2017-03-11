@@ -100,7 +100,8 @@ namespace rvision {
                 const std::string from,
                 const std::string to,
                 const std::string subject,
-                const std::string text) {
+                const std::string text,
+                const std::string &attachment) {
 
             if (to.empty()) {
                 throw std::invalid_argument("address to");
@@ -110,6 +111,10 @@ namespace rvision {
             values.emplace("to", to);
             values.emplace("subject", subject);
             values.emplace("text", text);
+
+            if (!attachment.empty()) {
+                values.emplace("attachment", attachment);
+            }
 
             try {
                 m_rest_client->request_post(m_config.base_url() + "/messages", m_config.host(), values);
@@ -123,7 +128,14 @@ namespace rvision {
         bool send_mail(const std::string to,
                        const std::string subject,
                        const std::string text) {
-            return send_mail(m_config.address_from(), to, subject, text);
+            return send_mail(m_config.address_from(), to, subject, text, "");
+        }
+
+        bool send_mail(const std::string to,
+                       const std::string subject,
+                       const std::string text,
+                       const std::string &attachment) {
+            return send_mail(m_config.address_from(), to, subject, text, attachment);
         }
 
     private:
