@@ -28,6 +28,10 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
+#include <unistd.h>
+#include <functional>
+#include <fcntl.h>
+
 
 namespace rvision {
     namespace sys {
@@ -56,7 +60,8 @@ application::application()
         : m_general_desc(po::options_description("Rvision application configuration")),
           m_specific_desc(po::options_description("Rvision specific configuration")),
           m_cmdline_desc(po::options_description()),
-          m_config_map(po::variables_map()) {
+          m_config_map(po::variables_map()),
+          m_pid_fd(-1) {
 
     m_general_desc.add_options()
             ("version", "prints the application version")
@@ -84,10 +89,23 @@ int application::run(int argc, const char **argv) {
 
         configure_file_logging();
 
+        if (should_run_as_daemon()) {
+            daemonize();
+        }
+
+        using namespace std::placeholders;
+        m_signal_handler.register_signal(std::bind(&application::handle_sigint, this), SIGINT);
+        m_signal_handler.register_signal(std::bind(&application::handle_sighup, this), SIGHUP);
+        m_signal_handler.register_signal(std::bind(&application::handle_sigterm, this), SIGTERM);
+
+        run_internal();
+
     } catch (app_exception &e) {
         if (e.is_error()) {
+            ALOG(ERROR) << "application failed to run because: " << e.what();
             return EXIT_FAILURE;
         } else {
+            ALOG(WARNING) << "application failed to run because: " << e.what();
             return EXIT_SUCCESS;
         }
     }
@@ -131,4 +149,120 @@ void application::configure_file_logging() {
         el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Filename, m_config_map["logfile"].as<std::string>());
         ALOG(INFO) << "loggers also log to file: " << m_config_map["logfile"].as<std::string>();
     }
+}
+
+bool application::should_run_as_daemon() {
+    auto result = false;
+    try {
+        result = m_config_map.count("daemon") > 0;
+    } catch (...) {
+
+    }
+    return result;
+}
+
+void application::cleanup_lockfile() {
+    /* Unlock and close lockfile */
+    if (m_pid_fd != -1) {
+        lockf(m_pid_fd, F_ULOCK, 0);
+        close(m_pid_fd);
+
+        unlink("/tmp/rvision_daemon.lock");
+    }
+
+}
+
+void application::handle_sigint() {
+    ALOG(INFO) << "stopping daemon (received SIGINT) ...";
+
+    cleanup_lockfile();
+
+    /* Reset signal handling to default behavior */
+    signal(SIGINT, SIG_DFL);
+}
+
+void application::handle_sighup() {
+    ALOG(INFO) << "handling sighup ___";
+}
+
+void application::handle_sigterm() {
+    ALOG(INFO) << "stopping daemon (received SIGTERM) ...";
+
+    cleanup_lockfile();
+
+    /* Reset signal handling to default behavior */
+    signal(SIGTERM, SIG_DFL);
+}
+
+void application::daemonize() {
+    pid_t pid = 0;
+
+    signal(SIGHUP, SIG_IGN);
+
+    /* Fork off the parent process */
+    pid = fork();
+
+
+    /* An error occurred */
+    if (pid < 0) {
+        throw app_exception(true, "pid failed");
+    }
+
+    /* Success: Let the parent terminate */
+    if (pid > 0) {
+        exit(EXIT_SUCCESS);
+    }
+
+    /* On success: The child process becomes session leader */
+    if (setsid() < 0) {
+        throw app_exception(true, "setsid failed");
+    }
+
+    /* Ignore signal sent from child to parent process */
+    signal(SIGCHLD, SIG_IGN);
+
+    /* Fork off for the second time*/
+    pid = fork();
+
+    /* An error occurred */
+    if (pid < 0) {
+        throw app_exception(true, "pid failed");
+    }
+
+    /* Success: Let the parent terminate */
+    if (pid > 0) {
+        exit(EXIT_SUCCESS);
+    }
+
+    /* Set new file permissions */
+    umask(0);
+
+    /* Change the working directory to the root directory */
+    /* or another appropriated directory */
+    chdir("/");
+
+    /* Reopen stdin (fd = 0), stdout (fd = 1), stderr (fd = 2) */
+    stdin = fopen("/dev/null", "r");
+    stdout = fopen("/dev/null", "w+");
+    stderr = fopen("/dev/null", "w+");
+
+    /* Try to write PID of daemon to lockfile */
+    m_pid_fd = open("/tmp/rvision_daemon.lock", O_RDWR | O_CREAT, 0640);
+    if (m_pid_fd < 0) {
+        /* Can't open lockfile */
+        throw app_exception(true, "failed to open lockfile");
+    }
+    if (lockf(m_pid_fd, F_TLOCK, 0) < 0) {
+        /* Can't lock file */
+        throw app_exception(true, "can't lock file");
+    }
+
+    /* Write PID to lockfile */
+    auto pidstr = std::to_string(getpid()).c_str();
+    write(m_pid_fd, pidstr, strlen(pidstr));
+}
+
+
+void application::run_internal() {
+    ALOG(INFO) << "run_internal ___";
 }

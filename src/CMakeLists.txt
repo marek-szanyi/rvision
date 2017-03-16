@@ -28,7 +28,8 @@ set(SOURCE_FILES
         ./rest_api_factory.h
         ./application.cpp
         ./application.h
-)
+        ./signal_handler.h
+        )
 
 set(LIBB64_FILES
         ../libs/libb64/cdecode.c

@@ -27,7 +27,9 @@
 #define RVISION_APPLICATION_H
 
 #include "easylogging++.h"
+#include "signal_handler.h"
 #include <boost/program_options.hpp>
+
 
 namespace rvision {
     namespace sys {
@@ -57,6 +59,8 @@ namespace rvision {
             boost::program_options::options_description m_specific_desc;
             boost::program_options::options_description m_cmdline_desc;
             boost::program_options::variables_map m_config_map;
+            signal_handler<void(void)> m_signal_handler;
+            int m_pid_fd;
 
             /**
              * @brief tries to parse the command line arguments
@@ -80,7 +84,44 @@ namespace rvision {
              */
             void configure_file_logging();
 
+            /**
+             * @brief check whenever the application should run as daemon based on config
+             * @return true if yes, false otherwise
+             */
+            bool should_run_as_daemon();
+
+            /**
+             * @brief fork a daemon
+             */
+            void daemonize();
+
+            /**
+             * @brief run the main application logic
+             * @throws app_error in case of execution error
+             */
+            void run_internal();
+
+            /**
+             * @brief handle SIGINT from OS
+             */
+            void handle_sigint();
+
+            /**
+             * @brief handle SIGHUP from OS
+             */
+            void handle_sighup();
+
+            /**
+             * @brief handle SIGHUP from OS
+             */
+            void handle_sigterm();
+
+            /**
+             * @brief cleanup lock file created when running as daemon
+             */
+            void cleanup_lockfile();
         };
+
     }
 }
 
