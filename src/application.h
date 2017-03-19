@@ -28,6 +28,7 @@
 
 #include "easylogging++.h"
 #include "signal_handler.h"
+#include "rvision_core.h"
 #include <boost/program_options.hpp>
 
 
@@ -61,6 +62,7 @@ namespace rvision {
             boost::program_options::variables_map m_config_map;
             signal_handler<void(void)> m_signal_handler;
             int m_pid_fd;
+            rvision::rvision_core m_rvision_core;
 
             /**
              * @brief tries to parse the command line arguments

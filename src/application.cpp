@@ -175,6 +175,7 @@ void application::cleanup_lockfile() {
 void application::handle_sigint() {
     ALOG(INFO) << "stopping daemon (received SIGINT) ...";
 
+    m_rvision_core.finish();
     cleanup_lockfile();
 
     /* Reset signal handling to default behavior */
@@ -188,6 +189,7 @@ void application::handle_sighup() {
 void application::handle_sigterm() {
     ALOG(INFO) << "stopping daemon (received SIGTERM) ...";
 
+    m_rvision_core.finish();
     cleanup_lockfile();
 
     /* Reset signal handling to default behavior */
@@ -265,4 +267,14 @@ void application::daemonize() {
 
 void application::run_internal() {
     ALOG(INFO) << "run_internal ___";
+    try {
+        m_rvision_core.init(m_config_map["conf"].as<std::string>());
+        m_rvision_core.run();
+    } catch (invalid_core_state &ics) {
+        ALOG(ERROR) << "an invalid state occurred while running : " << ics.what();
+        throw app_exception(true);
+    } catch (core_error &ce) {
+        ALOG(ERROR) << "error while running: " << ce.what();
+        throw app_exception(true);
+    }
 }

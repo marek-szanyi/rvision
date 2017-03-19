@@ -29,6 +29,8 @@ set(SOURCE_FILES
         ./application.cpp
         ./application.h
         ./signal_handler.h
+        rvision_core.cpp
+        rvision_core.h
         )
 
 set(LIBB64_FILES
