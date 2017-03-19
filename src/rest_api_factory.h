@@ -55,19 +55,6 @@ namespace rvision {
             return std::make_shared<TClient>(m_rest_client);
         }
 
-        /**
-         * @brief create a new instance of type TClient and also configures the newly created instance
-         * @tparam TClient type of the instance
-         * @tparam TConf type of the configuration input
-         * @param input configuration
-         * @return shared_ptr of the new instance
-         */
-        template<typename TClient, typename TConf>
-        std::shared_ptr<TClient> create(const TConf &input) {
-            std::shared_ptr<TClient> client = std::make_shared(m_rest_client);
-            client->configure().read(input);
-            return client;
-        };
 
     private:
        std::shared_ptr<rvision::rest_client> m_rest_client;
