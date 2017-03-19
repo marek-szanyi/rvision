@@ -49,9 +49,10 @@ namespace rvision {
                   m_config_map(po::variables_map()) {
 
             m_config_desc.add_options()
-                    ("min_interval", po::value<size_t>()->required(), "minimal interval between notifications")
-                    ("telnums", po::value<std::string>()->required(), "phone numbers to notify")
-                    ("msg", po::value<std::string>(), "optional message of the notification");
+                    ("sms_notifier.min_interval", po::value<size_t>()->required(),
+                     "minimal interval between notifications")
+                    ("sms_notifier.telnums", po::value<std::string>()->required(), "phone numbers to notify")
+                    ("sms_notifier.msg", po::value<std::string>(), "optional message of the notification");
 
         }
 
