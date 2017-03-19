@@ -60,11 +60,13 @@ namespace rvision {
                 get()[__get_clazz_uid<Type>()] = creator;
             }
 
-            std::shared_ptr<rvision::notifiers<Tdata>> make(const Tconfig &config) {
+            static std::shared_ptr<rvision::notifiers<Tdata>> make(const Tconfig &config) {
                 std::shared_ptr<rvision::notifiers<Tdata>> notificator = std::make_shared<rvision::notifiers<Tdata>>();
                 for (auto &creator : get()) {
                     auto new_notifier = creator.second(config);
-                    notificator->attach(new_notifier);
+                    if (new_notifier != nullptr) {
+                        notificator->attach(new_notifier);
+                    }
                 }
 
                 return notificator;
