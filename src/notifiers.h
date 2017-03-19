@@ -44,6 +44,10 @@ namespace rvision {
             }
         }
 
+        const size_t count() {
+            return m_notificators.size();
+        }
+
     private:
         boost::ptr_vector<rvision::observer<Tvalue>> m_notificators;
     };
