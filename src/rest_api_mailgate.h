@@ -44,9 +44,9 @@ namespace rvision {
         config_file_mailgate() : m_config_desc(po::options_description("Configuration for Mailgate REST API")),
                                  m_config_map(po::variables_map()) {
             m_config_desc.add_options()
-                    ("base_url", po::value<std::string>(), "base url for all REST calls")
-                    ("host", po::value<std::string>(), "REST API host")
-                    ("from", po::value<std::string>(), "the origin of the mail");
+                    ("mailgate_api.base_url", po::value<std::string>(), "base url for all REST calls")
+                    ("mailgate_api.host", po::value<std::string>(), "REST API host")
+                    ("mailgate_api.from", po::value<std::string>(), "the origin of the mail");
 
 
         }

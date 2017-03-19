@@ -50,10 +50,10 @@ namespace rvision {
                   m_config_map(po::variables_map()) {
 
             m_config_desc.add_options()
-                    ("emails", po::value<std::string>()->required(), "comma separated emails to notify")
-                    ("attachment_extra", po::value<bool>(), "send extra data as attachment")
-                    ("subject", po::value<std::string>()->required(), "subject of the mail")
-                    ("msg", po::value<std::string>(), "optional message of the notification");
+                    ("email_notifier.emails", po::value<std::string>()->required(), "comma separated emails to notify")
+                    ("email_notifier.attachment_extra", po::value<bool>(), "send extra data as attachment")
+                    ("email_notifier.subject", po::value<std::string>()->required(), "subject of the mail")
+                    ("email_notifier.msg", po::value<std::string>(), "optional message of the notification");
         }
 
         /**

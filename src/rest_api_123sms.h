@@ -30,6 +30,7 @@
 #include <map>
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/exception/all.hpp>
 
 #include "rest_client.h"
 #include "config_error.h"
@@ -43,11 +44,14 @@ namespace rvision {
         config_file_123sms() : m_config_desc(po::options_description("Configuration for 123SMS REST API")),
                                m_config_map(po::variables_map()) {
             m_config_desc.add_options()
-                    ("login", po::value<std::string>()->default_value(std::string()), "login to 123sms service provider")
-                    ("api_key", po::value<std::string>()->default_value(std::string()), "the api key associated with the login")
-                    ("base_url", po::value<std::string>(), "base url for all REST calls")
-                    ("host", po::value<std::string>(), "REST API host")
-                    ("sender_name", po::value<std::string>()->default_value(std::string()), "name shown as sender in the sms messages");
+                    ("123sms_api.login", po::value<std::string>()->default_value(std::string()),
+                     "login to 123sms service provider")
+                    ("123sms_api.api_key", po::value<std::string>()->default_value(std::string()),
+                     "the api key associated with the login")
+                    ("123sms_api.base_url", po::value<std::string>(), "base url for all REST calls")
+                    ("123sms_api.host", po::value<std::string>(), "REST API host")
+                    ("123sms_api.sender_name", po::value<std::string>()->default_value(std::string()),
+                     "name shown as sender in the sms messages");
         }
 
         void read(const boost::filesystem::path &config) {
