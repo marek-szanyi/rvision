@@ -25,10 +25,27 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include <vector>
+#include <chrono>
+
+
 namespace rvision {
 
     class event {
+    public:
+        event();
 
+        event(const std::vector<unsigned char> &data);
+
+        const std::chrono::system_clock time();
+
+        const std::vector<unsigned char> &cdata();
+
+        std::vector<unsigned char> &data();
+
+    private:
+        const std::chrono::system_clock m_time;
+        std::vector<unsigned char> m_data;
     };
 }
 

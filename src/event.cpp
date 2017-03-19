@@ -26,3 +26,22 @@
 
 using namespace rvision;
 
+event::event() : m_time(), m_data() {
+
+}
+
+event::event(const std::vector<unsigned char> &data) : m_time(), m_data(data) {
+
+}
+
+const std::chrono::system_clock event::time() {
+    return m_time;
+}
+
+const std::vector<unsigned char> &event::cdata() {
+    return m_data;
+}
+
+std::vector<unsigned char> &event::data() {
+    return m_data;
+}
