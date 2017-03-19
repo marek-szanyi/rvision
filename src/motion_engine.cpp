@@ -24,6 +24,7 @@
  */
 #include "motion_engine.h"
 #include <opencv/cv.hpp>
+#include <stdexcept>
 
 using namespace rvision;
 
@@ -125,14 +126,25 @@ void motion_engine::init() {
 //    }
 }
 
-void motion_engine::start(std::function<void(cv::Mat)> on_motion_detected) {
+
+void motion_engine::start_async(std::function<void(cv::Mat)> on_motion_detected) {
     using std::placeholders::_1;
     auto fbind = std::bind(&motion_engine::worker_func, this, _1);
     m_workthread.reset(new std::thread(fbind, on_motion_detected));
 }
 
+
+void motion_engine::start(std::function<void(cv::Mat)> on_motion_detected) {
+    start_async(on_motion_detected);
+    m_workthread->join();
+}
+
+
 void motion_engine::stop() {
     m_worker_running = false;
+    if (m_workthread->joinable()) {
+        m_workthread->join();
+    }
 }
 
 void motion_engine::worker_func(std::function<void(cv::Mat)> on_motion_detected) {
@@ -144,6 +156,18 @@ void motion_engine::worker_func(std::function<void(cv::Mat)> on_motion_detected)
             on_motion_detected(result);
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(500ms);
+        }
+    }
+}
+
+namespace rvision {
+    namespace engine_tools {
+
+        void to_raw_png(const cv::Mat &input, std::vector<uchar> &output) {
+            std::vector<int> params;
+            if (!cv::imencode("png", input, output, params)) {
+                throw std::runtime_error("failed to encode image to png");
+            }
         }
     }
 }

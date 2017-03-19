@@ -26,6 +26,7 @@
 #define RVISION_MOTION_ENGINE_H
 
 #include <memory>
+#include <vector>
 #include <functional>
 #include <thread>
 #include <atomic>
@@ -42,6 +43,8 @@ namespace rvision {
         void init();
 
         void start(std::function<void(cv::Mat)> on_motion_detected);
+
+        void start_async(std::function<void(cv::Mat)> on_motion_detected);
 
         void stop();
 
@@ -73,6 +76,10 @@ namespace rvision {
         cv::Mat m_kernel_ero;
         int m_number_of_changes, m_number_of_sequence = 0;
     };
+
+    namespace engine_tools {
+        void to_raw_png(const cv::Mat &input, std::vector<uchar> &output);
+    }
 }
 
 
