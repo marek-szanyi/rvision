@@ -41,6 +41,8 @@ public:
         std::cout << " ~~~~~~~~~~~~ " << to << " ~~~~~~~~~ \n";
         std::cout << " ~~~~~~~~~~~~ " << attachment << " ~~~~~~~~~ \n";
         m_attachment = attachment;
+
+        return true;
     }
 };
 
